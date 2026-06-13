@@ -1,0 +1,62 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CreateCustomerResponse {
+  data: Customer!
+  message: String!
+}
+
+type Customer {
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+}
+
+input CustomerInput {
+  email: String!
+  name: String!
+}
+
+type CustomerPaginatedResponse {
+  data: [Customer!]!
+  meta: PaginationMeta!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createCustomer(input: CustomerInput!): CreateCustomerResponse!
+  deleteCustomer(id: String!): CreateCustomerResponse!
+  updateCustomer(id: String!, input: UpdateCustomerInput!): CreateCustomerResponse!
+}
+
+input PaginationInput {
+  pageNumber: String
+  pageSize: String
+}
+
+type PaginationMeta {
+  currentPage: Int!
+  lastPage: Int!
+  next: Int
+  pageSize: Int!
+  prev: Int
+  total: Int!
+}
+
+type Query {
+  getAllCustomer(payload: PaginationInput!): CustomerPaginatedResponse!
+  getCustomerById(id: String!): Customer!
+  getHello: String!
+}
+
+input UpdateCustomerInput {
+  email: String
+  name: String
+}
