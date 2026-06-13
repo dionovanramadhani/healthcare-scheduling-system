@@ -12,19 +12,24 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type LoginResponse {
+  token: String!
+  user: User!
+}
+
 type Mutation {
+  login(input: AuthInput!): LoginResponse!
   register(input: AuthInput!): User!
+  validateToken(input: String!): User!
 }
 
 type Query {
   hello: String!
-  users: [User!]!
 }
 
 type User {
   createdAt: DateTime!
   email: String!
   id: ID!
-  password: String!
   updatedAt: DateTime!
 }
