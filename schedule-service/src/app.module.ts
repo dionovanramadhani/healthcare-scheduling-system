@@ -9,6 +9,7 @@ import { AppResolver } from './app.resolver';
 import { AuthGuard } from './guard/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { CustomerModule } from './customer/customer.module';
+import { DoctorModule } from './doctor/doctor.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CustomerModule } from './customer/customer.module';
     }),
     PrismaModule,
     CustomerModule,
+    DoctorModule,
   ],
   controllers: [AppController],
   providers: [

@@ -17,12 +17,3 @@ export class UpdateCustomerInput {
   @Field({ nullable: true })
   email: string;
 }
-
-@InputType()
-export class PaginationInput {
-  @Field({ nullable: true })
-  pageNumber?: string;
-
-  @Field({ nullable: true })
-  pageSize?: string;
-}

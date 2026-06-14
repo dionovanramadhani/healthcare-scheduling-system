@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import {
   CustomerInput,
-  PaginationInput,
   UpdateCustomerInput,
 } from './dto/create-customer.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationInput } from 'src/dto/app.input';
 
 @Injectable()
 export class CustomerService {
@@ -22,24 +22,13 @@ export class CustomerService {
       throw new BadRequestException('Email dan nama harus diisi!');
 
     try {
-      const customerIsExist = await this.db.customer.findFirst({
-        where: {
-          email,
-        },
-      });
-
-      if (customerIsExist)
-        throw new BadRequestException('User ini sudah terdaftar');
-
-      const newCustomer = await this.db.customer.create({
+      return await this.db.customer.create({
         data: customerInput,
       });
-
-      return {
-        message: 'Successfully add new customer',
-        data: newCustomer,
-      };
     } catch (error) {
+      if (error.code === 'P2002')
+        throw new BadRequestException('User ini sudah terdaftar');
+
       throw new InternalServerErrorException(error);
     }
   }
@@ -48,39 +37,22 @@ export class CustomerService {
     const { name, email } = customerInput;
 
     try {
-      const findCustomer = await this.db.customer.findFirst({
+      return await this.db.customer.update({
         where: {
           id: customerId,
         },
-      });
-
-      if (!findCustomer)
-        throw new NotFoundException('Customer tidak ditemukan');
-
-      const emailIsUsed = await this.db.customer.findFirst({
-        where: {
-          email,
-        },
-      });
-
-      if (emailIsUsed) throw new BadRequestException('Email sudah terpakai!');
-
-      const updatedCustomer = await this.db.customer.update({
-        where: {
-          id: customerId,
-        },
-        //  ...(referralCode && { referralCode: referralCode }),
         data: {
           ...(name && { name: name }),
           ...(email && { email: email }),
         },
       });
-
-      return {
-        message: 'Successfully update customer data',
-        data: updatedCustomer,
-      };
     } catch (error) {
+      if (error.code === 'P2025')
+        throw new NotFoundException('User tidak ditemukan!');
+
+      if (error.code === 'P2002')
+        throw new BadRequestException('Email sudah terpakai!');
+
       throw new InternalServerErrorException(error);
     }
   }
@@ -89,17 +61,21 @@ export class CustomerService {
     const { pageNumber, pageSize } = payload;
 
     try {
-      const count = await this.db.customer.count();
-
       const page = Number(pageNumber) || 1;
       const perPage = Number(pageSize) || 100;
       const skip = page > 0 ? perPage * (page - 1) : 0;
-      const lastPage = Math.ceil(count / perPage);
 
-      const customer = await this.db.customer.findMany({
-        take: perPage,
-        skip,
-      });
+      const [count, customer] = await Promise.all([
+        // count
+        this.db.customer.count(),
+        // customer
+        this.db.customer.findMany({
+          take: perPage,
+          skip,
+        }),
+      ]);
+
+      const lastPage = Math.ceil(count / perPage);
 
       return {
         meta: {
@@ -119,38 +95,30 @@ export class CustomerService {
 
   async getCustomerById(customerId: string) {
     try {
-      const customer = await this.db.customer.findFirst({
+      return await this.db.customer.findFirstOrThrow({
         where: {
           id: customerId,
         },
       });
-      if (!customer) throw new NotFoundException('Customer tidak ditemukan!');
-
-      return customer;
     } catch (error) {
+      if (error.code === 'P2025')
+        throw new NotFoundException('User tidak ditemukan!');
+
       throw new InternalServerErrorException(error);
     }
   }
 
   async deleteCustomer(customeerId: string) {
     try {
-      const customerExist = await this.db.customer.findFirst({
-        where: { id: customeerId },
-      });
-      if (!customerExist)
-        throw new NotFoundException('Customer tidak ditemukan!');
-
-      const deleteCustomer = await this.db.customer.delete({
+      return await this.db.customer.delete({
         where: {
           id: customeerId,
         },
       });
-
-      return {
-        message: 'Successfully delete customer',
-        data: deleteCustomer,
-      };
     } catch (error) {
+      if (error.code === 'P2025')
+        throw new NotFoundException('User tidak ditemukan!');
+
       throw new InternalServerErrorException(error);
     }
   }

@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type CreateCustomerResponse {
-  data: Customer!
-  message: String!
-}
-
 type Customer {
   createdAt: DateTime!
   email: String!
@@ -30,15 +25,34 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Doctor {
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+}
+
+input DoctorInput {
+  name: String
+}
+
+type DoctorPaginatedResponse {
+  data: [Doctor!]!
+  meta: PaginationMeta!
+}
+
 type Mutation {
-  createCustomer(input: CustomerInput!): CreateCustomerResponse!
-  deleteCustomer(id: String!): CreateCustomerResponse!
-  updateCustomer(id: String!, input: UpdateCustomerInput!): CreateCustomerResponse!
+  createCustomer(input: CustomerInput!): Customer!
+  createDoctor(input: DoctorInput!): Doctor!
+  deleteCustomer(id: String!): Customer!
+  deleteDoctor(id: String!): Doctor!
+  updateCustomer(id: String!, input: UpdateCustomerInput!): Customer!
+  updateDoctor(id: String!, input: DoctorInput!): Doctor!
 }
 
 input PaginationInput {
-  pageNumber: String
-  pageSize: String
+  pageNumber: Int
+  pageSize: Int
 }
 
 type PaginationMeta {
@@ -52,7 +66,9 @@ type PaginationMeta {
 
 type Query {
   getAllCustomer(payload: PaginationInput!): CustomerPaginatedResponse!
+  getAllDoctors(payload: PaginationInput!): DoctorPaginatedResponse!
   getCustomerById(id: String!): Customer!
+  getDoctorById(id: String!): Doctor!
   getHello: String!
 }
 
