@@ -34,7 +34,7 @@ export class CustomerResolver {
   }
 
   @Query(() => CustomerPaginatedResponse)
-  getAllCustomer(@Args('payload') payload: PaginationInput) {
+  getAllCustomer(@Args('payload', { nullable: true }) payload?: PaginationInput) {
     return this.customerService.getAllCustomer(payload);
   }
 

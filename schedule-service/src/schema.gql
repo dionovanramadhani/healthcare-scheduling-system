@@ -7,6 +7,7 @@ type Customer {
   email: String!
   id: String!
   name: String!
+  schedules: [Schedule!]!
   updatedAt: DateTime!
 }
 
@@ -29,6 +30,7 @@ type Doctor {
   createdAt: DateTime!
   id: String!
   name: String!
+  schedules: [Schedule!]!
   updatedAt: DateTime!
 }
 
@@ -44,10 +46,17 @@ type DoctorPaginatedResponse {
 type Mutation {
   createCustomer(input: CustomerInput!): Customer!
   createDoctor(input: DoctorInput!): Doctor!
+  createSchedule(input: ScheduleInput!): Schedule!
   deleteCustomer(id: String!): Customer!
   deleteDoctor(id: String!): Doctor!
+  deleteSchedule(id: String!): Schedule!
   updateCustomer(id: String!, input: UpdateCustomerInput!): Customer!
   updateDoctor(id: String!, input: DoctorInput!): Doctor!
+}
+
+type PaginatedScheduleResponse {
+  data: [Schedule!]!
+  meta: PaginationMeta!
 }
 
 input PaginationInput {
@@ -65,11 +74,44 @@ type PaginationMeta {
 }
 
 type Query {
-  getAllCustomer(payload: PaginationInput!): CustomerPaginatedResponse!
-  getAllDoctors(payload: PaginationInput!): DoctorPaginatedResponse!
+  getAllCustomer(payload: PaginationInput): CustomerPaginatedResponse!
+  getAllDoctors(payload: PaginationInput): DoctorPaginatedResponse!
+  getAllSchedules(payload: SchedulePayload): PaginatedScheduleResponse!
   getCustomerById(id: String!): Customer!
   getDoctorById(id: String!): Doctor!
   getHello: String!
+  getScheduleById(id: String!): Schedule!
+}
+
+type Schedule {
+  createdAt: DateTime!
+  customer: Customer!
+  customerId: String!
+  doctor: Doctor!
+  doctorId: String!
+  id: String!
+  objective: String!
+  scheduledAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input ScheduleFilterInput {
+  customerId: String
+  doctorId: String
+  objective: String
+  scheduledAt: DateTime
+}
+
+input ScheduleInput {
+  customerId: String!
+  doctorId: String!
+  objective: String!
+  scheduledAt: DateTime!
+}
+
+input SchedulePayload {
+  filter: ScheduleFilterInput
+  meta: PaginationInput
 }
 
 input UpdateCustomerInput {

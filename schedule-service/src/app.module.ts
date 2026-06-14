@@ -10,6 +10,7 @@ import { AuthGuard } from './guard/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { CustomerModule } from './customer/customer.module';
 import { DoctorModule } from './doctor/doctor.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DoctorModule } from './doctor/doctor.module';
     PrismaModule,
     CustomerModule,
     DoctorModule,
+    ScheduleModule,
   ],
   controllers: [AppController],
   providers: [

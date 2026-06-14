@@ -7,20 +7,10 @@ input AuthInput {
   password: String!
 }
 
-input CreateDoctorInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type Doctor {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
 
 type LoginResponse {
   token: String!
@@ -28,23 +18,13 @@ type LoginResponse {
 }
 
 type Mutation {
-  createDoctor(createDoctorInput: CreateDoctorInput!): Doctor!
   login(input: AuthInput!): LoginResponse!
   register(input: AuthInput!): User!
-  removeDoctor(id: Int!): Doctor!
-  updateDoctor(updateDoctorInput: UpdateDoctorInput!): Doctor!
   validateToken(input: String!): User!
 }
 
 type Query {
-  doctor(id: Int!): Doctor!
   hello: String!
-}
-
-input UpdateDoctorInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 type User {

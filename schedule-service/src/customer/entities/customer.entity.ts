@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
 import { PaginationMeta } from 'src/app.entity';
+import { Schedule } from 'src/schedule/entities/schedule.entity';
 
 @ObjectType()
 export class Customer {
@@ -17,6 +18,9 @@ export class Customer {
 
   @Field()
   updatedAt: Date;
+
+  @Field(() => [Schedule])
+  schedules: Schedule[];
 }
 
 @ObjectType()

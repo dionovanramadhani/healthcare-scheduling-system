@@ -29,7 +29,7 @@ export class DoctorResolver {
   }
 
   @Query(() => DoctorPaginatedResponse)
-  getAllDoctors(@Args('payload') payload: PaginationInput) {
+  getAllDoctors(@Args('payload', { nullable: true }) payload?: PaginationInput) {
     return this.doctorService.getAllDoctors(payload);
   }
 }

@@ -15,6 +15,9 @@ export class DoctorService {
     try {
       return await this.db.doctor.create({
         data: doctorInput,
+        include: {
+          schedules: true,
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(error);
@@ -23,10 +26,16 @@ export class DoctorService {
 
   async updateDoctor(id: string, input: DoctorInput) {
     try {
-      return await this.db.doctor.update({ where: { id }, data: input });
+      return await this.db.doctor.update({
+        where: { id },
+        data: input,
+        include: {
+          schedules: true,
+        },
+      });
     } catch (error) {
       if (error.code === 'P2025')
-        throw new NotFoundException('Doctor tidak ditemukan');
+        throw new NotFoundException('Dokter tidak ditemukan');
 
       throw new InternalServerErrorException(error);
     }
@@ -38,16 +47,19 @@ export class DoctorService {
         where: {
           id,
         },
+        include: {
+          schedules: true,
+        },
       });
     } catch (error) {
       if (error.code === 'P2025')
-        throw new NotFoundException('Doctor tidak ditemukan');
+        throw new NotFoundException('Dokter tidak ditemukan');
 
       throw new InternalServerErrorException(error);
     }
   }
 
-  async getAllDoctors(payload: PaginationInput) {
+  async getAllDoctors(payload: PaginationInput = {}) {
     const { pageNumber, pageSize } = payload;
 
     try {
@@ -62,6 +74,9 @@ export class DoctorService {
         this.db.doctor.findMany({
           take: perPage,
           skip,
+          include: {
+            schedules: true,
+          },
         }),
       ]);
 
@@ -89,10 +104,13 @@ export class DoctorService {
         where: {
           id,
         },
+        include: {
+          schedules: true,
+        },
       });
     } catch (error) {
       if (error.code === 'P2025')
-        throw new NotFoundException('Doctor tidak ditemukan');
+        throw new NotFoundException('Dokter tidak ditemukan');
 
       throw new InternalServerErrorException(error);
     }
