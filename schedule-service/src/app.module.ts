@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
@@ -27,9 +25,8 @@ import { EmailModule } from './email/email.module';
     ScheduleModule,
     EmailModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     AppResolver,
     { provide: APP_GUARD, useClass: AuthGuard },
   ],

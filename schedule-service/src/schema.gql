@@ -44,14 +44,65 @@ type DoctorPaginatedResponse {
 }
 
 type Mutation {
-  createCustomer(input: CustomerInput!): Customer!
-  createDoctor(input: DoctorInput!): Doctor!
-  createSchedule(input: ScheduleInput!): Schedule!
-  deleteCustomer(id: String!): Customer!
-  deleteDoctor(id: String!): Doctor!
-  deleteSchedule(id: String!): Schedule!
-  updateCustomer(id: String!, input: UpdateCustomerInput!): Customer!
-  updateDoctor(id: String!, input: DoctorInput!): Doctor!
+  """Registers a new customer/patient with a name and email."""
+  createCustomer(
+    """Input data for a new customer (name and email)"""
+    input: CustomerInput!
+  ): Customer!
+
+  """Registers a new doctor with their full name."""
+  createDoctor(
+    """Input data for the new doctor (name)"""
+    input: DoctorInput!
+  ): Doctor!
+
+  """
+  Creates a new schedule between a customer and a doctor. Automatically checks for schedule conflicts.
+  """
+  createSchedule(
+    """
+    Input data for creating a new schedule (customer ID, doctor ID, objective, and scheduled time)
+    """
+    input: ScheduleInput!
+  ): Schedule!
+
+  """Deletes a customer by their ID."""
+  deleteCustomer(
+    """The ID of the customer to be deleted"""
+    id: String!
+  ): Customer!
+
+  """Deletes a doctor from the system by their ID."""
+  deleteDoctor(
+    """The ID of the doctor to be deleted"""
+    id: String!
+  ): Doctor!
+
+  """Deletes a schedule by its ID."""
+  deleteSchedule(
+    """The ID of the schedule to be deleted"""
+    id: String!
+  ): Schedule!
+
+  """
+  Updates the profile information of an already registered customer/patient.
+  """
+  updateCustomer(
+    """The ID of the customer to be updated"""
+    id: String!
+
+    """Update data for the customer (name and/or email)"""
+    input: UpdateCustomerInput!
+  ): Customer!
+
+  """Updates the information of an already registered doctor."""
+  updateDoctor(
+    """The ID of the doctor whose data is to be updated"""
+    id: String!
+
+    """Update data for the doctor (new name)"""
+    input: DoctorInput!
+  ): Doctor!
 }
 
 type PaginatedScheduleResponse {
@@ -74,14 +125,42 @@ type PaginationMeta {
 }
 
 type Query {
-  getAllCustomer(payload: PaginationInput): CustomerPaginatedResponse!
-  getAllDoctors(payload: PaginationInput): DoctorPaginatedResponse!
-  getAllSchedules(payload: SchedulePayload): PaginatedScheduleResponse!
-  getCustomerById(id: String!): Customer!
-  getDoctorById(id: String!): Doctor!
+  """Retrieves all registered customers with pagination."""
+  getAllCustomer(
+    """Page number and page size parameters (pagination)"""
+    payload: PaginationInput
+  ): CustomerPaginatedResponse!
+
+  """Gets all registered doctors with pagination."""
+  getAllDoctors(
+    """Pagination parameters (page number and page size)"""
+    payload: PaginationInput
+  ): DoctorPaginatedResponse!
+
+  """Gets all schedules with pagination and optional filters."""
+  getAllSchedules(
+    """Pagination, search, and filter parameters for schedules"""
+    payload: SchedulePayload
+  ): PaginatedScheduleResponse!
+
+  """Gets specific data of a single customer by their ID."""
+  getCustomerById(
+    """The ID of the customer to look up"""
+    id: String!
+  ): Customer!
+
+  """Retrieves a specific doctor by their ID."""
+  getDoctorById(
+    """The ID of the doctor to look up"""
+    id: String!
+  ): Doctor!
   getHello: String!
-  getScheduleById(id: String!): Schedule!
-  sendEmail: String!
+
+  """Gets details of a specific schedule by its ID."""
+  getScheduleById(
+    """The ID of the schedule to retrieve"""
+    id: String!
+  ): Schedule!
 }
 
 type Schedule {

@@ -18,12 +18,29 @@ type LoginResponse {
 }
 
 type Mutation {
-  login(input: AuthInput!): LoginResponse!
-  register(input: AuthInput!): User!
-  validateToken(input: String!): User!
+  """Logs in a user and returns a JWT access token."""
+  login(
+    """Input data for user login (email and password)"""
+    input: AuthInput!
+  ): LoginResponse!
+
+  """Registers a new user with email and password."""
+  register(
+    """Input data for user registration (email and password)"""
+    input: AuthInput!
+  ): User!
+
+  """
+  Validates a JWT access token and returns user information if the token is valid.
+  """
+  validateToken(
+    """The JWT token string to be validated"""
+    input: String!
+  ): User!
 }
 
 type Query {
+  """A simple query to check if the service is running correctly."""
   hello: String!
 }
 
