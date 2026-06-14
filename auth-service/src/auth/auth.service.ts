@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthInput } from './dto/create-auth.input';
+import { AuthInput } from './dto/auth.input';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

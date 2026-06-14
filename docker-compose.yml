@@ -1,19 +1,86 @@
 services:
-  postgres:
+  # Database khusus untuk Auth Service
+  auth-db:
     image: postgres:17-alpine
-    container_name: healthcare_system
+    container_name: auth_db_container
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Y7vIfKlCqx
+      POSTGRES_DB: auth_db
     ports:
       - "5454:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - auth_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - healthcare_system_network
+
+  schedule-db:
+    image: postgres:17-alpine
+    container_name: schedule_db_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Y7vIfKlCqx
+      POSTGRES_DB: schedule_service_db
+    ports:
+      - "5455:5432"
+    volumes:
+      - schedule_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - healthcare_system_network
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth_service
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://postgres:Y7vIfKlCqx@auth-db:5432/auth_db?schema=public
+      PORT: 3001
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    command: sh -c "npx prisma migrate deploy && npm run start:prod"
+    networks:
+      - healthcare_system_network
+
+  # Schedule Service
+  schedule-service:
+    build:
+      context: ./schedule-service
+      dockerfile: Dockerfile
+    container_name: schedule_service
+    ports:
+      - "3002:3002"
+    environment:
+      DATABASE_URL: postgresql://postgres:Y7vIfKlCqx@schedule-db:5432/schedule_service_db?schema=public
+      AUTH_SERVICE_URL: http://auth-service:3001/
+      PUBLIC_KEY: 4kODVzGwdD
+      PORT: 3002
+    depends_on:
+      schedule-db:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    command: sh -c "npx prisma migrate deploy && npm run start:prod"
     networks:
       - healthcare_system_network
 
 volumes:
-  pgdata:
+  auth_pgdata:
+  schedule_pgdata:
 
 networks:
   healthcare_system_network:
