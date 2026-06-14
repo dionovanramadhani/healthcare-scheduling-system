@@ -7,13 +7,17 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ScheduleInput, SchedulePayload } from './dto/schedule.input';
+import { EmailService } from 'src/email/email.service';
 
 // Assumption appointment is 30 minutes
 const APPOINTMENT_DURATION = 30 * 60 * 1000;
 
 @Injectable()
 export class ScheduleService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private email: EmailService,
+  ) {}
 
   async createSchedule(input: ScheduleInput) {
     const { customerId, doctorId, objective, scheduledAt } = input;
@@ -62,6 +66,14 @@ export class ScheduleService {
             ? 'Dokter sudah memiliki jadwal lain di waktu tersebut'
             : 'Customer sudah memiliki jadwal lain di waktu tersebut',
         );
+
+      this.email.sendEmail({
+        to: validCustomer.email,
+        customerName: validCustomer.name,
+        doctorName: validDoctor.name,
+        scheduledAt,
+        objective,
+      });
 
       return await this.db.schedule.create({
         data: {

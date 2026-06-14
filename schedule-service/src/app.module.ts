@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { CustomerModule } from './customer/customer.module';
 import { DoctorModule } from './doctor/doctor.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ScheduleModule } from './schedule/schedule.module';
     CustomerModule,
     DoctorModule,
     ScheduleModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [

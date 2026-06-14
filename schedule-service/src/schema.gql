@@ -81,6 +81,7 @@ type Query {
   getDoctorById(id: String!): Doctor!
   getHello: String!
   getScheduleById(id: String!): Schedule!
+  sendEmail: String!
 }
 
 type Schedule {
