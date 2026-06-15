@@ -33,7 +33,7 @@ export class EmailService {
           <h2 style="color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Konfirmasi Jadwal Temu</h2>
           <p>Halo <strong>${data.customerName}</strong>,</p>
           <p>Jadwal temu Anda berhasil dibuat dengan rincian sebagai berikut:</p>
-          
+
           <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
             <tr style="background-color: #f8f9fa;">
               <td style="padding: 12px; border: 1px solid #dee2e6; font-weight: bold; width: 30%;">Dokter</td>
@@ -48,7 +48,7 @@ export class EmailService {
               <td style="padding: 12px; border: 1px solid #dee2e6;">${data.objective}</td>
             </tr>
           </table>
-          
+
           <p style="color: #7f8c8d; font-size: 14px; text-align: center; margin-top: 30px;">
             Terima kasih telah menggunakan layanan penjadwalan kesehatan kami.
           </p>

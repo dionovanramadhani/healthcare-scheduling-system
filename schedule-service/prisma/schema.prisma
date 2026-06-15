@@ -33,6 +33,6 @@ model Schedule {
   updatedAt   DateTime @updatedAt
   customerId  String   @db.Uuid
   doctorId    String   @db.Uuid
-  customer    Customer @relation(fields: [customerId], references: [id])
-  doctor      Doctor   @relation(fields: [doctorId], references: [id])
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  doctor      Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
 }

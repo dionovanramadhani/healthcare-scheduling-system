@@ -30,7 +30,7 @@ export class CustomerService {
       });
     } catch (error) {
       if (error.code === 'P2002')
-        throw new BadRequestException('User ini sudah terdaftar');
+        throw new BadRequestException('Customer ini sudah terdaftar');
 
       throw new InternalServerErrorException(error);
     }
@@ -120,11 +120,11 @@ export class CustomerService {
     }
   }
 
-  async deleteCustomer(customeerId: string) {
+  async deleteCustomer(customerId: string) {
     try {
       return await this.db.customer.delete({
         where: {
-          id: customeerId,
+          id: customerId,
         },
         include: {
           schedules: true,
