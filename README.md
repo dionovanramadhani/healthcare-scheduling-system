@@ -77,7 +77,7 @@ PUBLIC_KEY="4kODVzGwdD"
 PORT=3002
 
 # Resend Mail Service API Key
-RESEND_API_KEY="re_huuBpyqd_PvSg6yrtEHLVc5UNE6Qp9f18"
+RESEND_API_KEY="your_resend_api_key_here"
 ```
 
 ---
