@@ -1,0 +1,567 @@
+{
+  "info": {
+    "_postman_id": "9d9b8c99-c094-447f-9ebb-cb9d12110e39",
+    "name": "Rata Healthcare System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26860256",
+    "_collection_link": "https://go.postman.co/collection/26860256-9d9b8c99-c094-447f-9ebb-cb9d12110e39?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth Service",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation RegisterUser($input: AuthInput!) {\n  register(input: $input) {\n    id\n    email\n    createdAt\n    updatedAt\n  }\n}\n\n",
+                "variables": "{\n  \"input\": {\n    \"email\": \"user@example.com\",\n    \"password\": \"securePassword123\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3001",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3001"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation LoginUser($input: AuthInput!) {\n  login(input: $input) {\n    token\n    user {\n      id\n      email\n      createdAt\n      updatedAt\n    }\n  }\n}",
+                "variables": "{\n  \"input\": {\n    \"email\": \"user@example.com\",\n    \"password\": \"securePassword123\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3001",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3001"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation ValidateUserToken($token: String!) {\n  validateToken(input: $token) {\n    id\n    email\n    createdAt\n    updatedAt\n  }\n}\n\n",
+                "variables": "{\n  \"token\": \"PASTE_JWT_TOKEN_HERE\"\n}"
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3001",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3001"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Schedule Service",
+      "item": [
+        {
+          "name": "Customer",
+          "item": [
+            {
+              "name": "Create Customer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nmutation CreateCustomer($input: CustomerInput!) {\n  createCustomer(input: $input) {\n    id\n    name\n    email\n    createdAt\n    updatedAt\n  }\n}",
+                    "variables": "{\n  \"input\": {\n    \"name\": \"Jane Doe\",\n    \"email\": \"janedoe@example.com\"\n  }\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Customer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "mutation UpdateCustomer($id: String!, $input: UpdateCustomerInput!) {\n  updateCustomer(id: $id, input: $input) {\n    id\n    name\n    email\n    updatedAt\n  }\n}",
+                    "variables": "{\n  \"id\": \"69747f9f-d797-4c32-9429-5a21f7e25190\",\n  \"input\": {\n    \"name\": \"Jane Smith\",\n    \"email\": \"janesmith@example.com\"\n  }\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Customer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "mutation DeleteCustomer($id: String!) {\n  deleteCustomer(id: $id) {\n    id\n    name\n    email\n  }\n}",
+                    "variables": "{\n  \"id\": \"69747f9f-d797-4c32-9429-5a21f7e25190\"\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Customer By ID",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "query GetCustomerById($id: String!) {\n  getCustomerById(id: $id) {\n    id\n    name\n    email\n    createdAt\n    updatedAt\n    schedules {\n            createdAt\n            customerId\n            doctorId\n            id\n            objective\n            scheduledAt\n            updatedAt\n        }\n  }\n}",
+                    "variables": "{\n  \"id\": \"06c74b41-d694-411a-9a3e-a4af7005f13d\"\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Customers",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nquery GetAllCustomer($payload: PaginationInput) {\n  getAllCustomer(payload: $payload) {\n    meta {\n      total\n      currentPage\n      pageSize\n      lastPage\n      next\n      prev\n    }\n    data {\n      id\n      name\n      email\n      createdAt\n\t\t\tschedules {\n            createdAt\n            customerId\n            doctorId\n            id\n            objective\n            scheduledAt\n            updatedAt\n        }\n    }\n  }\n}",
+                    "variables": "{\n  \"payload\": {\n    \"pageNumber\": 1,\n    \"pageSize\": 2\n  }\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Doctor",
+          "item": [
+            {
+              "name": "Create Doctor",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nmutation CreateDoctor($input: DoctorInput!) {\n  createDoctor(input: $input) {\n    id\n    name\n    createdAt\n    updatedAt\n  }\n}",
+                    "variables": "{\n  \"input\": {\n    \"name\": \"Dr. Gregory House\"\n  }\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Doctor",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nmutation UpdateDoctor($id: String!, $input: DoctorInput!) {\n  updateDoctor(id: $id, input: $input) {\n    id\n    name\n    updatedAt\n  }\n}",
+                    "variables": "{\n  \"id\": \"7a891372-c766-462d-9c74-b3f6fab76923\",\n  \"input\": {\n    \"name\": \"Dr. Stephen Strange\"\n  }\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Doctor",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nmutation DeleteDoctor($id: String!) {\n  deleteDoctor(id: $id) {\n    id\n    name\n  }\n}",
+                    "variables": "{\n  \"id\": \"7a891372-c766-462d-9c74-b3f6fab76923\"\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Doctor By ID",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nquery GetDoctorById($id: String!) {\n  getDoctorById(id: $id) {\n    id\n    name\n    createdAt\n    updatedAt\n    schedules {\n\t\t\t\t\t\tcreatedAt\n            customerId\n            doctorId\n            id\n            objective\n            scheduledAt\n            updatedAt\n    }\n  }\n}",
+                    "variables": "{\n  \"id\": \"c0b02e21-5582-4cee-b30e-9deb2eb12b64\"\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Doctors",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nquery GetAllDoctors($payload: PaginationInput) {\n  getAllDoctors(payload: $payload) {\n    meta {\n      total\n      currentPage\n      pageSize\n      lastPage\n      next\n      prev\n    }\n    data {\n      id\n      name\n      createdAt\n    }\n  }\n}",
+                    "variables": "{\n  \"payload\": {\n    \"pageNumber\": 1,\n    \"pageSize\": 10\n  }\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Schedule",
+          "item": [
+            {
+              "name": "Create Schedule",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nmutation CreateSchedule($input: ScheduleInput!) {\n  createSchedule(input: $input) {\n    id\n    objective\n    scheduledAt\n    createdAt\n    customerId\n    doctorId\n    customer {\n      id\n      name\n      email\n    }\n    doctor {\n      id\n      name\n    }\n  }\n}",
+                    "variables": "{\n  \"input\": {\n    \"customerId\": \"06c74b41-d694-411a-9a3e-a4af7005f13d\",\n    \"doctorId\": \"c0b02e21-5582-4cee-b30e-9deb2eb12b64\",\n    \"objective\": \"Regular checkup\",\n    \"scheduledAt\": \"2026-06-25T14:30:00.000Z\"\n  }\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Schedule",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "mutation DeleteSchedule($id: String!) {\n  deleteSchedule(id: $id) {\n    id\n    objective\n    scheduledAt\n    createdAt\n  }\n}",
+                    "variables": "{\n  \"id\": \"fc9e77e3-1c15-41e8-a87e-c70885fc5342\"\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Schedule By ID",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "query GetScheduleById($id: String!) {\n  getScheduleById(id: $id) {\n    id\n    objective\n    scheduledAt\n    createdAt\n    updatedAt\n    customer {\n      name\n      email\n    }\n    doctor {\n      name\n    }\n  }\n}",
+                    "variables": "{\n  \"id\": \"2750e9fa-1e75-45b6-9b41-56f93a2173e0\"\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Schedule",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_secret}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "graphql",
+                  "graphql": {
+                    "query": "\nquery GetAllSchedules($payload: SchedulePayload) {\n  getAllSchedules(payload: $payload) {\n    meta {\n\t\t\ttotal\n      currentPage\n      pageSize\n      lastPage\n      next\n      prev\n    }\n    data {\n      id\n      objective\n      scheduledAt\n      customer {\n        name\n        email\n      }\n      doctor {\n        name\n      }\n    }\n  }\n}",
+                    "variables": "{\n  \"payload\": {\n    \"filter\": {\n      \"doctorId\": \"2db978d2-4b1f-4698-b508-615e3ce2fd11\",\n\t\t\t\"objective\": \"Konsul\"\n    },\n    \"meta\": {\n      \"pageNumber\": 1,\n      \"pageSize\": 5\n    }\n  }\n}"
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3002",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3002"
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
