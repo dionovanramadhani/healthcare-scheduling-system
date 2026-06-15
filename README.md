@@ -52,6 +52,9 @@ Configure these variables in `.env` files located inside their respective direct
 # Database connection URL (change localhost to auth-db inside Docker Compose)
 DATABASE_URL="postgresql://postgres:Y7vIfKlCqx@localhost:5454/auth_db?schema=public"
 
+# JWT Secret Key for token generation and validation
+JWT_SECRET="leVyZmv6AChy1pXrwobIdzC7ui3S54F2YRF7tUMjb02Tm4oGzOARKroUk8x1tW4YerVsfKbOc3i2BekEaKKeIKMj1DDaqj22epmgAlpxacGjGEEGq2HIgvSfSXw5wtmpAH"
+
 # HTTP Port of the service
 PORT=3001
 ```
@@ -71,7 +74,7 @@ PUBLIC_KEY="4kODVzGwdD"
 PORT=3002
 
 # Resend Mail Service API Key
-RESEND_API_KEY="your_resend_api_key_here"
+RESEND_API_KEY="re_huuBpyqd_PvSg6yrtEHLVc5UNE6Qp9f18"
 ```
 
 ---
