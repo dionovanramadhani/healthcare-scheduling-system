@@ -11,7 +11,7 @@ Below is a simple architectural diagram representing the connection between serv
 ```mermaid
 graph TD
     Client[GraphQL Clients / Playground]
-    
+
     subgraph Auth Service Area
         AuthService[Auth Service :3001]
         AuthDB[(Auth DB :5454)]
@@ -25,15 +25,16 @@ graph TD
 
     Client -->|GraphQL Queries/Mutations| AuthService
     Client -->|GraphQL Queries/Mutations| ScheduleService
-    
+
     AuthService -->|Prisma| AuthDB
     ScheduleService -->|Prisma| ScheduleDB
-    
+
     ScheduleService -->|GraphQL POST /validateToken| AuthService
     ScheduleService -.->|Email Notification| ResendAPI
 ```
 
 ### Components:
+
 1. **Auth Service**: Manages user registration, login, and JWT token validation. Runs on port `3001`.
 2. **Schedule Service**: Handles scheduling operations (Customers, Doctors, and Schedules). Runs on port `3002`.
 3. **PostgreSQL Databases**:
@@ -48,8 +49,9 @@ graph TD
 Configure these variables in `.env` files located inside their respective directories:
 
 ### Auth Service (`auth-service/.env`)
+
 ```env
-# Database connection URL (change localhost to auth-db inside Docker Compose)
+# Database connection URL
 DATABASE_URL="postgresql://postgres:Y7vIfKlCqx@localhost:5454/auth_db?schema=public"
 
 # JWT Secret Key for token generation and validation
@@ -60,8 +62,9 @@ PORT=3001
 ```
 
 ### Schedule Service (`schedule-service/.env`)
+
 ```env
-# Database connection URL (change localhost to schedule-db inside Docker Compose)
+# Database connection URL
 DATABASE_URL="postgresql://postgres:Y7vIfKlCqx@localhost:5455/schedule_service_db?schema=public"
 
 # Auth Service Endpoint for JWT validation
@@ -84,6 +87,7 @@ RESEND_API_KEY="re_huuBpyqd_PvSg6yrtEHLVc5UNE6Qp9f18"
 You can run the project using **Docker Compose** (fully containerized) or **Locally** (for development).
 
 ### Option 1: Running with Docker Compose (Recommended)
+
 This spin up the entire system including databases, app services, and applies database migrations automatically.
 
 1. Set the correct `RESEND_API_KEY` in `schedule-service/.env`.
@@ -98,15 +102,19 @@ This spin up the entire system including databases, app services, and applies da
 ---
 
 ### Option 2: Running Locally (For Development)
+
 For active development with hot-reload (`npm run start:dev`):
 
 1. **Start only the Database containers:**
+
    ```bash
    docker compose up -d auth-db schedule-db
    ```
-   *(Ensure database ports `5454` and `5455` are open).*
+
+   _(Ensure database ports `5454` and `5455` are open)._
 
 2. **Setup and run Auth Service:**
+
    ```bash
    cd auth-service
    npm install
@@ -129,12 +137,10 @@ For active development with hot-reload (`npm run start:dev`):
 ### 1. Auth Service (`http://localhost:3001`)
 
 #### User Registration (Mutation)
+
 ```graphql
 mutation RegisterUser {
-  register(input: {
-    email: "user@example.com",
-    password: "password123"
-  }) {
+  register(input: { email: "user@example.com", password: "password123" }) {
     id
     email
     createdAt
@@ -143,12 +149,10 @@ mutation RegisterUser {
 ```
 
 #### User Login (Mutation)
+
 ```graphql
 mutation LoginUser {
-  login(input: {
-    email: "user@example.com",
-    password: "password123"
-  }) {
+  login(input: { email: "user@example.com", password: "password123" }) {
     accessToken
     user {
       id
@@ -162,15 +166,13 @@ mutation LoginUser {
 
 ### 2. Schedule Service (`http://localhost:3002`)
 
-*Note: Except for Public queries, pass the JWT access token in the request headers: `Authorization: Bearer <your_access_token>`.*
+_Note: Except for Public queries, pass the JWT access token in the request headers: `Authorization: Bearer <your_access_token>`._
 
 #### Create Customer (Mutation)
+
 ```graphql
 mutation CreateCustomer {
-  createCustomer(input: {
-    name: "John Doe",
-    email: "johndoe@example.com"
-  }) {
+  createCustomer(input: { name: "John Doe", email: "johndoe@example.com" }) {
     id
     name
     email
@@ -179,11 +181,10 @@ mutation CreateCustomer {
 ```
 
 #### Create Doctor (Mutation)
+
 ```graphql
 mutation CreateDoctor {
-  createDoctor(input: {
-    name: "Dr. Gregory House"
-  }) {
+  createDoctor(input: { name: "Dr. Gregory House" }) {
     id
     name
   }
@@ -191,15 +192,19 @@ mutation CreateDoctor {
 ```
 
 #### Create Schedule (Mutation)
-*Note: Scheduled date must be in ISO String format.*
+
+_Note: Scheduled date must be in ISO String format._
+
 ```graphql
 mutation CreateSchedule {
-  createSchedule(input: {
-    customerId: "PASTE-CUSTOMER-UUID-HERE",
-    doctorId: "PASTE-DOCTOR-UUID-HERE",
-    objective: "Regular Heart checkup",
-    scheduledAt: "2026-06-20T10:00:00.000Z"
-  }) {
+  createSchedule(
+    input: {
+      customerId: "PASTE-CUSTOMER-UUID-HERE"
+      doctorId: "PASTE-DOCTOR-UUID-HERE"
+      objective: "Regular Heart checkup"
+      scheduledAt: "2026-06-20T10:00:00.000Z"
+    }
+  ) {
     id
     objective
     scheduledAt
@@ -215,14 +220,10 @@ mutation CreateSchedule {
 ```
 
 #### Get All Schedules with Pagination (Query)
+
 ```graphql
 query GetSchedules {
-  getAllSchedules(payload: {
-    meta: {
-      pageNumber: 1,
-      pageSize: 10
-    }
-  }) {
+  getAllSchedules(payload: { meta: { pageNumber: 1, pageSize: 10 } }) {
     meta {
       totalCount
       totalPages
